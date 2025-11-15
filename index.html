@@ -3,32 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>贪吃蛇游戏</title>
+    <title>全球热点新闻速览</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>贪吃蛇游戏</h1>
-        <div class="game-info">
-            <div class="score">得分: <span id="score">0</span></div>
-            <div class="high-score">最高分: <span id="highScore">0</span></div>
+    <header class="site-header">
+        <div class="header-content">
+            <div>
+                <h1>全球热点新闻速览</h1>
+                <p class="tagline">每天清晨快速掌握海外最新、最热资讯</p>
+            </div>
+            <div class="datetime" id="datetime"></div>
         </div>
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div class="controls">
-            <button id="startBtn" class="btn">开始游戏</button>
-            <button id="pauseBtn" class="btn" disabled>暂停</button>
-            <button id="restartBtn" class="btn">重新开始</button>
-        </div>
-        <div class="instructions">
-            <h3>游戏说明:</h3>
-            <ul>
-                <li>使用方向键 ↑ ↓ ← → 控制蛇的移动</li>
-                <li>吃到红色食物可以增加得分和长度</li>
-                <li>不要撞墙或撞到自己</li>
-                <li>按空格键可以暂停/继续游戏</li>
-            </ul>
-        </div>
-    </div>
-    <script src="game.js"></script>
+    </header>
+
+    <main class="layout">
+        <section class="panel settings">
+            <h2>数据源设置</h2>
+            <p class="hint">当前使用 <a href="https://gnews.io/" target="_blank" rel="noopener noreferrer">GNews API</a> 获取新闻，请在下方填写你的 API Key。</p>
+            <label class="field">
+                <span>API Key</span>
+                <input type="password" id="apiKeyInput" placeholder="在此粘贴你的 API Key">
+            </label>
+
+            <div class="field-grid">
+                <label class="field">
+                    <span>主题</span>
+                    <select id="topicSelect">
+                        <option value="world">国际</option>
+                        <option value="business">商业</option>
+                        <option value="technology">科技</option>
+                        <option value="science">科学</option>
+                        <option value="health">健康</option>
+                        <option value="sports">体育</option>
+                        <option value="entertainment">娱乐</option>
+                    </select>
+                </label>
+                <label class="field">
+                    <span>语言</span>
+                    <select id="languageSelect">
+                        <option value="en">英语</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日语</option>
+                        <option value="de">德语</option>
+                        <option value="fr">法语</option>
+                        <option value="es">西班牙语</option>
+                    </select>
+                </label>
+                <label class="field">
+                    <span>地区</span>
+                    <select id="countrySelect">
+                        <option value="us">美国</option>
+                        <option value="gb">英国</option>
+                        <option value="au">澳大利亚</option>
+                        <option value="ca">加拿大</option>
+                        <option value="sg">新加坡</option>
+                        <option value="in">印度</option>
+                    </select>
+                </label>
+                <label class="field">
+                    <span>数量</span>
+                    <input type="number" id="maxResults" min="3" max="30" value="12">
+                </label>
+            </div>
+
+            <div class="actions">
+                <button id="saveSettings" class="btn">保存设置</button>
+                <button id="refreshNews" class="btn primary">立即更新</button>
+            </div>
+
+            <div class="status" id="status"></div>
+        </section>
+
+        <section class="panel news">
+            <div class="news-header">
+                <div>
+                    <h2>今日焦点</h2>
+                    <p class="hint">自动抓取国际要闻，并生成简短摘要，方便快速浏览。</p>
+                </div>
+                <div class="search">
+                    <input type="search" id="searchInput" placeholder="搜索关键词，例如：AI、election">
+                    <button id="searchBtn" class="btn">搜索</button>
+                </div>
+            </div>
+
+            <div class="news-content">
+                <section>
+                    <h3>🔥 热门精选</h3>
+                    <div id="topStories" class="top-stories"></div>
+                </section>
+                <section>
+                    <h3>🕒 最新动态</h3>
+                    <div id="latestStories" class="latest-list"></div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <template id="topStoryTemplate">
+        <article class="story-card">
+            <a class="story-link" href="#" target="_blank" rel="noopener noreferrer"></a>
+            <div class="story-image"></div>
+            <div class="story-body">
+                <div class="story-meta"></div>
+                <h4 class="story-title"></h4>
+                <p class="story-summary"></p>
+            </div>
+        </article>
+    </template>
+
+    <template id="latestStoryTemplate">
+        <article class="story-item">
+            <div class="story-timestamp"></div>
+            <div class="story-content">
+                <a class="story-title" href="#" target="_blank" rel="noopener noreferrer"></a>
+                <p class="story-summary"></p>
+                <div class="story-meta"></div>
+            </div>
+        </article>
+    </template>
+
+    <script src="news.js"></script>
 </body>
 </html>
